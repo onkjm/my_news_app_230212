@@ -1,0 +1,15 @@
+{% extends "base.html" %}
+{% load crispy_forms_tags %}
+
+{% block title %} Create commnet {% endblock title %}
+
+{% block content %}
+
+<h1>Post Comment</h1>
+<form method="POST">{% csrf_token %}
+    <!-- {{form.as_p}} -->
+    {{ form|crispy }}
+    <input type="submit" value="Comment" class="btn btn-primary">
+</form>
+
+{% endblock content %}

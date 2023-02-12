@@ -1,0 +1,54 @@
+{% extends "base.html" %}
+
+{% block title %} Article list {% endblock title %}
+
+{% block content %}
+<h1>YOUR ARTICLES</h1>
+{% for article in object_list %}
+
+{% if request.user == article.author %}
+<div class="card m-1">
+    <div class="card-header">
+        <a href="{% url 'article_detail' article.pk %}" class="text-decoration-none">
+            <span class="font-weight-bold">{{ article.title }} </span>
+        </a>
+        <span class="text-muted">/ by {{ article.author }} | {{ article.date }} </span>
+    </div>
+    <div class="card-body">
+        <p class="card-text">{{ article.body }}</p>
+    </div>
+    <div class="card-footer text-muted text-center">
+        <div class="btn-group" role="group">
+            {# <a href="#" class="btn btn-outline-primary">Edit</a> #}
+            {# <a href="#" class="btn btn-outline-danger">Delete</a> #}
+            <a href="{% url 'article_edit' article.pk %}" class="btn btn-outline-primary">Edit</a>
+            <a href="{% url 'article_delete' article.pk %}" class="btn btn-outline-danger" data-toggle="modal"
+                data-target="#delete_{{ article.pk }}">Delete</a>
+        </div>
+    </div>
+</div>
+{% endif %}
+
+{% empty %}
+<div class="card m-1">
+    <div class="card-header">
+        <span class="font-weight-bold">title</span>
+        <span class="text-muted">/ by author | date</span>
+    </div>
+    <div class="card-body">
+        <p class="card-text">no article is created yet</p>
+    </div>
+    <div class="card-footer text-muted text-center">
+        <div class="btn-group" role="group">
+            <button class="btn btn-outline-primary">Edit</button>
+            <button class="btn btn-outline-danger">Delete</button>
+        </div>
+    </div>
+</div>
+{% endfor %}
+
+{% for article in object_list %}
+{% include "article_delete_modal.html" %}
+{% endfor %}
+
+{% endblock content %}

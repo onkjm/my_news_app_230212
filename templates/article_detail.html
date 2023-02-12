@@ -1,0 +1,44 @@
+{% extends "base.html" %}
+{% load crispy_forms_tags %}
+
+{% block title %} Article detail {% endblock title %}
+
+{% block content %}
+
+<h1>{{ article.title }}</h1>
+<p>by {{ article.author }} <span class="text-muted">| {{ article.date }} </span></p>
+<p class="text-break"> {{ article.body }} </p>
+
+<hr>
+
+<h1>Comments</h1>
+
+{% for comment in article.comment_set.all %}
+
+{{ comment.author }} <span class="text-muted">| {{ comment.date }}</span> : <p class="text-break">{{ comment.body }}</p>
+<hr>
+
+{% empty %}
+
+<p>No comments are posted yet.</p>
+
+{% endfor %}
+
+{% include "article_comment.html" %}
+
+<hr>
+
+<div class="text-right">
+    {% if request.user == article.author %}
+    <div class="btn-group" role="group">
+        <a href="{% url 'article_edit' article.pk %}" class="btn btn-outline-primary">Edit</a>
+        <a href="{% url 'article_delete' article.pk %}" class="btn btn-outline-danger" data-toggle="modal"
+            data-target="#delete_{{ article.pk }}">Delete</a>
+    </div>
+    {% endif %}
+</div>
+<a href="{% url 'article_list' %}" class="text-decoration-none">&lt back to article list</a>
+
+{% include "article_delete_modal.html" %}
+
+{% endblock content %}
